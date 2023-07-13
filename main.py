@@ -3,14 +3,15 @@ import curses
 from curses import wrapper
 from TextEditor import TextEditor
 
-
 selected = 0
 
-def draw_file_tree(stdscr ,path = None):
+
+def draw_file_tree(stdscr, path=None):
     if path is None:
         path = os.getcwd()
     for index, thingy in enumerate(os.listdir(path)):
         stdscr.addstr(index + 2, 0, f'{thingy}', (curses.A_REVERSE if index == selected else curses.A_NORMAL))
+
 
 def main(stdscr: curses.window):
     global selected
@@ -19,7 +20,7 @@ def main(stdscr: curses.window):
     Y, X = stdscr.getmaxyx()
     run = True
     while run:
-        stdscr.addstr(0, 0, (' ' * (X//2 - 6)) + 'FILE MANAGER' + (' ' * (X//2 - 6)), curses.A_REVERSE)
+        stdscr.addstr(0, 0, (' ' * (X // 2 - 6)) + 'FILE MANAGER' + (' ' * (X // 2 - 6)), curses.A_REVERSE)
         draw_file_tree(stdscr)
         key = stdscr.getch()
         if key == 27:
@@ -39,7 +40,6 @@ def main(stdscr: curses.window):
             stdscr.clear()
 
         selected %= len(os.listdir())
-
 
 
 wrapper(main)
