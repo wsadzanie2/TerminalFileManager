@@ -5,7 +5,7 @@ from curses import wrapper
 
 selected = 0
 
-text_editor = '$EDITOR'
+text_editor = 'nvim'
 
 def draw_file_tree(stdscr, path=None):
     if path is None:
@@ -17,25 +17,27 @@ def draw_file_tree(stdscr, path=None):
 def main(stdscr: curses.window):
     global selected
     stdscr.clear()
+    curses.use_default_colors()
     Y, X = stdscr.getmaxyx()
     run = True
     while run:
         stdscr.addstr(0, 0, (' ' * (X // 2 - 6)) + 'FILE MANAGER' + (' ' * (X // 2 - 6)), curses.A_REVERSE)
         draw_file_tree(stdscr)
         key = stdscr.getch()
-        if key == 27:
+        if key in [27, ord('q')]:
             run = False
-        elif key == curses.KEY_DOWN:
+            return
+        elif key in [curses.KEY_DOWN, ord('j')]:
             selected += 1
-        elif key == curses.KEY_UP:
+        elif key in [curses.KEY_UP, ord('k')]:
             selected -= 1
-        elif key == curses.KEY_RIGHT:
+        elif key in [curses.KEY_RIGHT, ord('l')]:
             if os.path.isdir(os.listdir()[selected]):
                 os.chdir(os.listdir()[selected])
             else:
                 subprocess.run([text_editor, str(os.listdir()[selected])])
             stdscr.clear()
-        elif key == curses.KEY_LEFT:
+        elif key in [curses.KEY_LEFT, ord('h')]:
             os.chdir('..')
             stdscr.clear()
 
