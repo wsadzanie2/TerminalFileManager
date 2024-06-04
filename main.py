@@ -1,10 +1,11 @@
 import os
+import subprocess
 import curses
 from curses import wrapper
-from TextEditor import TextEditor
 
 selected = 0
 
+text_editor = 'nvim'
 
 def draw_file_tree(stdscr, path=None):
     if path is None:
@@ -15,7 +16,6 @@ def draw_file_tree(stdscr, path=None):
 
 def main(stdscr: curses.window):
     global selected
-    text_edit = TextEditor(stdscr)
     stdscr.clear()
     Y, X = stdscr.getmaxyx()
     run = True
@@ -33,7 +33,7 @@ def main(stdscr: curses.window):
             if os.path.isdir(os.listdir()[selected]):
                 os.chdir(os.listdir()[selected])
             else:
-                text_edit.run(os.listdir()[selected])
+                subprocess.run([text_editor, str(os.listdir()[selected])])
             stdscr.clear()
         elif key == curses.KEY_LEFT:
             os.chdir('..')
