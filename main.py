@@ -5,7 +5,7 @@ from curses import wrapper
 
 selected = 0
 
-text_editor = 'nvim'
+text_editor = '$EDITOR'
 
 def draw_file_tree(stdscr, path=None):
     if path is None:
